@@ -1,0 +1,6 @@
+{
+  "name": "Marli Mais Leve - Controle Semanal de Peso",
+  "description": "Sistema alegre e acessível de controle semanal de peso para Dona Marli, com lembretes aos domingos, gráficos de progresso, gamificação com conquistas e integração Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
