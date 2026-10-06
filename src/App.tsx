@@ -214,7 +214,7 @@ export default function App() {
           {/* Clean Footer with direct Supabase access */}
           <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
             <span className="font-semibold text-slate-600">
-              Marli Mais Leve • Saúde, Longevidade & Constância Semanal
+              Em Forma • Saúde, Longevidade & Constância Semanal
             </span>
             <div className="flex items-center gap-3">
               <button

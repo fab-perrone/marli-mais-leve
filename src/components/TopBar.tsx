@@ -33,7 +33,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white">
-                Marli Mais Leve
+                Em Forma
               </span>
               <span className="text-[11px] font-semibold bg-emerald-800/80 text-amber-300 px-2 py-0.5 rounded-full border border-emerald-600">
                 Semanal

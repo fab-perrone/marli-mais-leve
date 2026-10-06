@@ -226,12 +226,12 @@ export const motivationalQuotes: MotivationalQuote[] = [
   {
     id: 'quote-1',
     quote: 'Cuidar de você não é luxo, é a sua maior demonstração de amor pela sua vida e pela sua família.',
-    author: 'Equipe Marli Mais Leve',
+    author: 'Equipe Em Forma',
     tag: 'Carinho & Constância',
   },
   {
     id: 'quote-2',
-    quote: 'Mais vale um passo firme no domingo do que uma corrida sem rumo durante a semana. Parabéns pela perseverança, Dona Marli!',
+    quote: 'Mais vale um passo firme no domingo do que uma corrida sem rumo durante a semana. Parabéns pela sua constância!',
     author: 'Sabedoria da Saúde',
     tag: 'Domingo Especial',
   },
@@ -250,7 +250,7 @@ export const motivationalQuotes: MotivationalQuote[] = [
   {
     id: 'quote-5',
     quote: 'Não tenha pressa. O segredo da vitória é a constância calma: um domingo de cada vez!',
-    author: 'Marli Mais Leve',
+    author: 'Em Forma',
     tag: 'Foco no Domingo',
   },
 ];

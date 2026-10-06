@@ -24,7 +24,7 @@ export const InAppNotificationToast: React.FC<InAppNotificationToastProps> = ({
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-900/60 px-2 py-0.5 rounded-full">
-                Notificação Marli Mais Leve
+                Notificação Em Forma
               </span>
               <span className="text-[10px] text-slate-400">{alert.timestamp}</span>
             </div>

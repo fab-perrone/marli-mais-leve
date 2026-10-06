@@ -101,7 +101,7 @@ export const SupabaseModal: React.FC<SupabaseModalProps> = ({
         {/* Body */}
         <div className="p-5 sm:p-6 space-y-4 max-h-[80vh] overflow-y-auto bg-amber-50/20">
           <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 leading-relaxed">
-            <span className="font-bold">✨ Armazenamento Seguro e Offline:</span> O Marli Mais Leve salva todos os
+            <span className="font-bold">✨ Armazenamento Seguro e Offline:</span> O Em Forma salva todos os
             dados no seu navegador por padrão. Ao conectar seu Supabase abaixo, suas pesagens ficam salvas na
             nuvem e contam com políticas ativadas de armazenamento!
           </div>

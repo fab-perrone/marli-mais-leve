@@ -156,7 +156,7 @@ export async function deleteEntryFromSupabase(id: string): Promise<boolean> {
 }
 
 export const SUPABASE_SQL_SCHEMA = `-- ========================================================
--- SISTEMA: MARLI MAIS LEVE
+-- SISTEMA: EM FORMA
 -- SCRIPT SQL COMPLETO COM POLÍTICAS DE ARMAZENAMENTO ATIVADAS (STORAGE + RLS)
 -- Execute este script no SQL Editor do seu projeto Supabase
 -- ========================================================
