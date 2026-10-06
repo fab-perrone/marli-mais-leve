@@ -141,7 +141,7 @@ export function evaluateAchievements(
 
   // Check if target was hit exactly
   if (currentWeight <= targetWeight && targetWeight > 0) {
-    triggerGoalNotification(`Parabéns de todo o coração! Você alcançou o seu peso meta de ${targetWeight} kg!`);
+    triggerGoalNotification(`Parabéns de todo o coração! Você alcançou o seu peso meta de ${targetWeight.toFixed(2)} kg!`);
   }
 
   return { updated, newlyUnlocked };

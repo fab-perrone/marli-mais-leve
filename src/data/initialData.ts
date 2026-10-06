@@ -2,22 +2,22 @@ import { Achievement, HealthTip, MotivationalQuote, UserProfile, WeightEntry } f
 
 export const defaultProfile: UserProfile = {
   name: 'Dona Marli',
-  initialWeight: 78.5,
-  targetWeight: 72.0,
+  initialWeight: 78.50,
+  targetWeight: 72.00,
   height: 162,
   birthYear: 1956,
   sundayReminderTime: '08:00',
   soundEnabled: true,
   seniorMode: true, // Default to true so buttons are large, clear and readable
   speechEnabled: true,
-  weeklyGoalRate: 0.4,
+  weeklyGoalRate: 0.40,
 };
 
 export const initialWeightEntries: WeightEntry[] = [
   {
     id: 'entry-1',
     date: '2026-08-30',
-    weight: 78.5,
+    weight: 78.50,
     note: 'Início da jornada com ânimo e caminhada leve no parque.',
     feeling: 'firme',
     isSunday: true,
@@ -26,7 +26,7 @@ export const initialWeightEntries: WeightEntry[] = [
   {
     id: 'entry-2',
     date: '2026-09-06',
-    weight: 77.9,
+    weight: 77.85,
     note: 'Bebi 2 litros de água todos os dias e troquei pão branco por aveia.',
     feeling: 'otimo',
     isSunday: true,
@@ -35,7 +35,7 @@ export const initialWeightEntries: WeightEntry[] = [
   {
     id: 'entry-3',
     date: '2026-09-13',
-    weight: 77.2,
+    weight: 77.20,
     note: 'Sentindo as pernas bem mais leves e mais disposição nas manhãs!',
     feeling: 'otimo',
     isSunday: true,
@@ -44,7 +44,7 @@ export const initialWeightEntries: WeightEntry[] = [
   {
     id: 'entry-4',
     date: '2026-09-20',
-    weight: 76.5,
+    weight: 76.45,
     note: 'Semana com bastante sopa de legumes e saladas coloridas.',
     feeling: 'bem',
     isSunday: true,
@@ -53,7 +53,7 @@ export const initialWeightEntries: WeightEntry[] = [
   {
     id: 'entry-5',
     date: '2026-09-27',
-    weight: 75.8,
+    weight: 75.80,
     note: 'Quarto domingo consecutivo! A família toda comemorando.',
     feeling: 'focado',
     isSunday: true,
@@ -62,8 +62,8 @@ export const initialWeightEntries: WeightEntry[] = [
   {
     id: 'entry-6',
     date: '2026-10-04',
-    weight: 75.1,
-    note: 'Quase na meta dos 74 kg. Pressão arterial excelente na consulta médica.',
+    weight: 75.15,
+    note: 'Quase na meta dos 72 kg. Pressão arterial excelente na consulta médica.',
     feeling: 'otimo',
     isSunday: true,
     created_at: '2026-10-04T08:12:00Z',

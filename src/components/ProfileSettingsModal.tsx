@@ -70,7 +70,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               </label>
               <input
                 type="number"
-                step="0.1"
+                step="0.01"
                 value={form.initialWeight}
                 onChange={(e) => setForm({ ...form, initialWeight: parseFloat(e.target.value) || 0 })}
                 className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-300 text-lg font-black focus:border-emerald-500 focus:outline-none"
@@ -82,7 +82,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               </label>
               <input
                 type="number"
-                step="0.1"
+                step="0.01"
                 value={form.targetWeight}
                 onChange={(e) => setForm({ ...form, targetWeight: parseFloat(e.target.value) || 0 })}
                 className="w-full px-3.5 py-2.5 rounded-xl border-2 border-slate-300 text-lg font-black focus:border-emerald-500 focus:outline-none text-emerald-800"

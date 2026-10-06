@@ -110,12 +110,14 @@ export function speakText(text: string, enabled = true) {
 }
 
 export function speakWeight(weight: number, enabled = true) {
-  const parts = weight.toFixed(1).split('.');
+  const parts = weight.toFixed(2).split('.');
   const intPart = parts[0];
   const decPart = parts[1];
   let text = `${intPart} quilos`;
-  if (decPart && decPart !== '0') {
-    text += ` e ${decPart}centos gramas`;
+  const decNum = parseInt(decPart, 10);
+  if (decNum > 0) {
+    const grams = decNum * 10;
+    text += ` e ${grams} gramas`;
   }
   speakText(text, enabled);
 }

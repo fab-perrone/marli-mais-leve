@@ -85,7 +85,7 @@ export default function App() {
       setCurrentToast({
         id: 'toast-' + Date.now(),
         title: '✅ Peso Registrado com Sucesso!',
-        body: `Seu peso de ${entryData.weight} kg foi anotado com carinho!`,
+        body: `Seu peso de ${entryData.weight.toFixed(2)} kg foi anotado com carinho!`,
         timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
         type: 'goal',
       });
@@ -182,6 +182,7 @@ export default function App() {
                 profile={profile}
                 onDeleteEntry={handleDeleteEntry}
                 onOpenWeightModal={() => setIsWeightModalOpen(true)}
+                onOpenProfileModal={() => setIsProfileModalOpen(true)}
               />
             </section>
           )}
@@ -228,7 +229,7 @@ export default function App() {
                 onClick={() => setIsProfileModalOpen(true)}
                 className="font-bold text-slate-700 hover:text-slate-900 underline flex items-center gap-1"
               >
-                <span>⚙️ Ajustes & Metas</span>
+                <span>⚙️ Ajustes & Metas ({profile.targetWeight.toFixed(2)} kg)</span>
               </button>
             </div>
           </div>

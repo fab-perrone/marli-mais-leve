@@ -8,6 +8,7 @@ interface ProgressChartProps {
   profile: UserProfile;
   onDeleteEntry: (id: string) => void;
   onOpenWeightModal: () => void;
+  onOpenProfileModal?: () => void;
 }
 
 export const ProgressChart: React.FC<ProgressChartProps> = ({
@@ -15,6 +16,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
   profile,
   onDeleteEntry,
   onOpenWeightModal,
+  onOpenProfileModal,
 }) => {
   const [filterRange, setFilterRange] = useState<'4' | '8' | 'all'>('all');
   const [hoveredEntry, setHoveredEntry] = useState<WeightEntry | null>(null);
@@ -35,17 +37,42 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
   const totalChange = currentWeight - initialWeight;
   const remainingToGoal = currentWeight - targetWeight;
 
-  // Elderly BMI Calculation (adapted for seniors >= 60 yrs, where 23.0 to 28.0 is optimal)
-  const heightM = profile.height / 100;
-  const bmi = heightM > 0 ? Number((currentWeight / (heightM * heightM)).toFixed(1)) : 24.5;
-  let bmiCategory = 'Adequado para Longevidade';
-  let bmiColor = 'text-emerald-700 bg-emerald-100';
-  if (bmi < 22) {
-    bmiCategory = 'Atenção: Peso Baixo';
-    bmiColor = 'text-amber-800 bg-amber-100';
-  } else if (bmi > 27) {
-    bmiCategory = 'Sobrepeso Leve';
-    bmiColor = 'text-orange-800 bg-orange-100';
+  // Cálculo Oficial do IMC (Índice de Massa Corporal)
+  // Fórmula: peso (kg) / [altura (m) * altura (m)]
+  const heightCm = profile.height && profile.height > 50 ? profile.height : 162;
+  const heightM = heightCm / 100;
+  const rawBmi = heightM > 0 && currentWeight > 0 ? currentWeight / (heightM * heightM) : 0;
+  const bmiFormatted = rawBmi > 0 ? rawBmi.toFixed(2) : '--';
+
+  // Diagnóstico e Classificação Completa do IMC (OMS + OPAS 60+)
+  let bmiCategory = 'Peso Normal / Saudável';
+  let bmiColor = 'text-emerald-800 bg-emerald-100 border-emerald-300';
+  let bmiDescription = 'Seu peso atual está equilibrado e proporcional para sua estatura.';
+
+  if (rawBmi < 18.50) {
+    bmiCategory = 'Abaixo do Peso';
+    bmiColor = 'text-sky-800 bg-sky-100 border-sky-300';
+    bmiDescription = 'Abaixo da faixa padrão. É importante assegurar ingestão suficiente de nutrientes.';
+  } else if (rawBmi >= 18.50 && rawBmi <= 24.99) {
+    bmiCategory = 'Peso Normal / Saudável';
+    bmiColor = 'text-emerald-800 bg-emerald-100 border-emerald-300';
+    bmiDescription = 'Excelente! Peso proporcional para longevidade e saúde do organismo.';
+  } else if (rawBmi >= 25.00 && rawBmi <= 29.99) {
+    bmiCategory = 'Sobrepeso';
+    bmiColor = 'text-amber-900 bg-amber-100 border-amber-300';
+    bmiDescription = 'Levemente acima do peso padrão. Manter o ritmo semanal levará à sua meta com segurança.';
+  } else if (rawBmi >= 30.00 && rawBmi <= 34.99) {
+    bmiCategory = 'Obesidade Grau I';
+    bmiColor = 'text-orange-900 bg-orange-100 border-orange-300';
+    bmiDescription = 'Acima da faixa recomendada. Priorize alimentos naturais, legumes e caminhadas leves.';
+  } else if (rawBmi >= 35.00 && rawBmi <= 39.99) {
+    bmiCategory = 'Obesidade Grau II';
+    bmiColor = 'text-rose-900 bg-rose-100 border-rose-300';
+    bmiDescription = 'Atenção especial recomendada com orientação médica e nutricional.';
+  } else if (rawBmi >= 40.00) {
+    bmiCategory = 'Obesidade Grau III';
+    bmiColor = 'text-rose-950 bg-rose-200 border-rose-400';
+    bmiDescription = 'Classificação de obesidade severa com acompanhamento profissional indicado.';
   }
 
   // SVG Chart Calculation
@@ -95,7 +122,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Peso Inicial</span>
           <div className="my-1">
             <span className="text-2xl sm:text-3xl font-black text-slate-800 tabular-nums">
-              {initialWeight.toFixed(1)}
+              {initialWeight.toFixed(2)}
             </span>
             <span className="text-sm font-bold text-slate-500 ml-1">kg</span>
           </div>
@@ -110,7 +137,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
           </div>
           <div className="my-1">
             <span className="text-3xl sm:text-4xl font-black text-emerald-950 tabular-nums">
-              {currentWeight.toFixed(1)}
+              {currentWeight.toFixed(2)}
             </span>
             <span className="text-sm font-bold text-emerald-700 ml-1">kg</span>
           </div>
@@ -135,7 +162,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
                 totalChange < 0 ? 'text-emerald-700' : totalChange > 0 ? 'text-amber-700' : 'text-slate-700'
               }`}
             >
-              {totalChange > 0 ? `+${totalChange.toFixed(1)}` : totalChange.toFixed(1)}
+              {totalChange > 0 ? `+${totalChange.toFixed(2)}` : totalChange.toFixed(2)}
             </span>
             <span className="text-sm font-bold text-slate-500">kg</span>
           </div>
@@ -149,12 +176,12 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
           <span className="text-xs font-bold text-amber-900 uppercase tracking-wide">Sua Meta</span>
           <div className="my-1">
             <span className="text-2xl sm:text-3xl font-black text-amber-950 tabular-nums">
-              {targetWeight.toFixed(1)}
+              {targetWeight.toFixed(2)}
             </span>
             <span className="text-sm font-bold text-amber-800 ml-1">kg</span>
           </div>
           <span className="text-[11px] text-amber-900 font-bold">
-            {remainingToGoal > 0 ? `Faltam ${remainingToGoal.toFixed(1)} kg` : 'Meta Alcançada! 🏆'}
+            {remainingToGoal > 0 ? `Faltam ${remainingToGoal.toFixed(2)} kg` : 'Meta Alcançada! 🏆'}
           </span>
         </div>
       </div>
@@ -270,7 +297,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
                   textAnchor="end"
                   className="text-[11px] font-bold fill-amber-700"
                 >
-                  Meta: {targetWeight} kg
+                  Meta: {targetWeight.toFixed(2)} kg
                 </text>
               </g>
             )}
@@ -335,7 +362,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
                       isSunday ? 'fill-amber-900 font-black' : 'fill-emerald-900'
                     }`}
                   >
-                    {p.entry.weight.toFixed(1)}
+                    {p.entry.weight.toFixed(2)}
                   </text>
 
                   {/* Date label at bottom */}
@@ -373,7 +400,7 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
                   :
                 </span>{' '}
                 <span className="font-black text-emerald-800 text-base tabular-nums">
-                  {hoveredEntry.weight.toFixed(1)} kg
+                  {hoveredEntry.weight.toFixed(2)} kg
                 </span>
                 {hoveredEntry.note && (
                   <p className="text-xs text-amber-900/80 italic mt-0.5">"{hoveredEntry.note}"</p>
@@ -389,18 +416,57 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
           </div>
         )}
 
-        {/* Elder Health Insight / BMI Bar */}
-        <div className="mt-5 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs sm:text-sm">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-700">Índice Corporal Saudável (IMC):</span>
-            <span className="font-mono font-black text-slate-900 tabular-nums">{bmi}</span>
-            <span className={`px-2.5 py-0.5 rounded-full font-bold text-xs ${bmiColor}`}>
-              {bmiCategory}
-            </span>
+        {/* Bloco Oficial do Cálculo do IMC com Duas Casas Decimais */}
+        <div className="mt-5 pt-4 border-t border-slate-100 bg-emerald-50/60 rounded-2xl p-4 border border-emerald-200">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-lg">⚖️</span>
+                <span className="font-extrabold text-slate-800 text-sm sm:text-base">
+                  Cálculo Oficial do IMC:
+                </span>
+                <span className="font-mono font-black text-lg sm:text-xl text-emerald-950 tabular-nums bg-white px-2.5 py-0.5 rounded-lg border border-emerald-300 shadow-xs">
+                  {bmiFormatted} kg/m²
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-1">
+                Fórmula: {currentWeight.toFixed(2)} kg ÷ ({heightM.toFixed(2)} m)² ={' '}
+                <strong className="text-slate-900 font-mono">{bmiFormatted}</strong>
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className={`px-3 py-1.5 rounded-xl font-extrabold text-xs sm:text-sm border shadow-xs ${bmiColor}`}>
+                {bmiCategory}
+              </span>
+              {onOpenProfileModal && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    soundEffects.playClick();
+                    onOpenProfileModal();
+                  }}
+                  title="Editar altura nas preferências"
+                  className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-300 transition-colors"
+                >
+                  Altura: {heightCm} cm ✏️
+                </button>
+              )}
+            </div>
           </div>
-          <span className="text-slate-500 text-xs">
-            Padrão adaptado para preservação de massa óssea e muscular em pessoas 60+
-          </span>
+
+          <div className="mt-2.5 pt-2 border-t border-emerald-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+            <p className="text-slate-700 font-medium">
+              💡 {bmiDescription}
+            </p>
+            <div className="text-[11px] text-slate-500 font-semibold flex flex-wrap gap-2">
+              <span>Normal: 18,50 a 24,99</span>
+              <span>·</span>
+              <span>Sobrepeso: 25,00 a 29,99</span>
+              <span>·</span>
+              <span>Obesidade: ≥ 30,00</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -467,14 +533,14 @@ export const ProgressChart: React.FC<ProgressChartProps> = ({
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <span className="text-xl sm:text-2xl font-black text-emerald-950 tabular-nums">
-                      {entry.weight.toFixed(1)}
+                      {entry.weight.toFixed(2)}
                     </span>
                     <span className="text-xs font-bold text-slate-500 ml-1">kg</span>
                   </div>
 
                   <button
                     onClick={() => {
-                      if (confirm(`Deseja excluir a pesagem de ${entry.weight} kg do dia ${fullDate}?`)) {
+                      if (confirm(`Deseja excluir a pesagem de ${entry.weight.toFixed(2)} kg do dia ${fullDate}?`)) {
                         soundEffects.playClick();
                         onDeleteEntry(entry.id);
                       }

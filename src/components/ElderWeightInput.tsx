@@ -30,7 +30,7 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
   // Sync state whenever modal is opened
   useEffect(() => {
     if (isOpen) {
-      const initial = lastWeight ? lastWeight.toFixed(1).replace('.', ',') : '75,0';
+      const initial = lastWeight ? lastWeight.toFixed(2).replace('.', ',') : '75,00';
       setWeightStr(initial);
       setErrorMessage(null);
     }
@@ -47,20 +47,20 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
     setErrorMessage(null);
   };
 
-  // Stepper adjustments (+ / -)
+  // Stepper adjustments (+ / -) com duas casas decimais
   const handleAdjust = (delta: number) => {
     soundEffects.playClick();
     setErrorMessage(null);
     const currentNum = parseFloat(weightStr.replace(',', '.')) || (lastWeight || 75.0);
-    const newNum = Math.max(25, Math.min(250, Number((currentNum + delta).toFixed(1))));
-    const formatted = newNum.toFixed(1).replace('.', ',');
+    const newNum = Math.max(25, Math.min(250, Number((currentNum + delta).toFixed(2))));
+    const formatted = newNum.toFixed(2).replace('.', ',');
     setWeightStr(formatted);
     if (profile.speechEnabled) {
       speakWeight(newNum, true);
     }
   };
 
-  // Keypad presses
+  // Keypad presses com suporte a 2 casas decimais
   const handleKeypadPress = (val: string) => {
     soundEffects.playClick();
     setErrorMessage(null);
@@ -81,10 +81,14 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
       return;
     }
 
-    // Number digit
+    // Number digit: limita a até 2 casas decimais após a vírgula
     setWeightStr((prev) => {
       if (prev === '0') return val;
-      if (prev.length >= 5) return prev;
+      if (prev.includes(',')) {
+        const parts = prev.split(',');
+        if (parts[1] && parts[1].length >= 2) return prev; // máximo 2 casas decimais
+      }
+      if (prev.length >= 7) return prev;
       return prev + val;
     });
   };
@@ -94,7 +98,12 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
     setErrorMessage(null);
     const raw = e.target.value;
     // Allow numbers, comma, dot
-    const filtered = raw.replace(/[^0-9,\.]/g, '');
+    let filtered = raw.replace(/[^0-9,\.]/g, '');
+    if (filtered.includes(',') || filtered.includes('.')) {
+      const sep = filtered.includes(',') ? ',' : '.';
+      const [intPart, decPart = ''] = filtered.split(sep);
+      filtered = `${intPart}${sep}${decPart.slice(0, 2)}`;
+    }
     setWeightStr(filtered);
   };
 
@@ -109,7 +118,7 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
     }
   };
 
-  // Confirm & Save
+  // Confirm & Save mantendo exatamente duas casas decimais
   const handleConfirm = () => {
     const parsed = parseFloat(weightStr.replace(',', '.'));
     if (isNaN(parsed) || parsed < 25 || parsed > 250) {
@@ -118,10 +127,13 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
       return;
     }
 
+    // Mantém exatamente 2 casas decimais sem arredondamento indesejado
+    const preciseWeight = Math.round(parsed * 100) / 100;
+
     soundEffects.playSuccess();
     onSave({
       date: selectedDate,
-      weight: Number(parsed.toFixed(1)),
+      weight: preciseWeight,
       note: note.trim() || undefined,
       feeling,
       isSunday: isSundayDate,
@@ -322,53 +334,53 @@ export const ElderWeightInput: React.FC<ElderWeightInputProps> = ({
                 Toque nos botões para somar ou subtrair:
               </p>
 
-              {/* Adjust +/- 0.5 kg */}
+              {/* Adjust +/- 0.50 kg */}
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => handleAdjust(-0.5)}
                   className="h-16 rounded-2xl bg-rose-50 border-3 border-rose-300 text-rose-800 hover:bg-rose-100 active:scale-95 font-black text-2xl sm:text-3xl flex items-center justify-center gap-1 shadow-sm transition-transform"
                 >
-                  <span className="text-rose-600">-</span> 0,5 kg
+                  <span className="text-rose-600">-</span> 0,50 kg
                 </button>
                 <button
                   type="button"
                   onClick={() => handleAdjust(0.5)}
                   className="h-16 rounded-2xl bg-emerald-50 border-3 border-emerald-400 text-emerald-800 hover:bg-emerald-100 active:scale-95 font-black text-2xl sm:text-3xl flex items-center justify-center gap-1 shadow-sm transition-transform"
                 >
-                  <span className="text-emerald-600">+</span> 0,5 kg
+                  <span className="text-emerald-600">+</span> 0,50 kg
                 </button>
               </div>
 
-              {/* Adjust +/- 0.1 kg and +/- 1.0 kg */}
+              {/* Adjust +/- 0.10 kg and +/- 1.00 kg */}
               <div className="grid grid-cols-4 gap-2">
                 <button
                   type="button"
                   onClick={() => handleAdjust(-1.0)}
-                  className="h-14 rounded-2xl bg-slate-100 border-2 border-slate-300 text-slate-800 font-bold text-base hover:bg-slate-200 active:scale-95"
+                  className="h-14 rounded-2xl bg-slate-100 border-2 border-slate-300 text-slate-800 font-bold text-sm sm:text-base hover:bg-slate-200 active:scale-95"
                 >
-                  -1,0 kg
+                  -1,00 kg
                 </button>
                 <button
                   type="button"
                   onClick={() => handleAdjust(-0.1)}
-                  className="h-14 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-900 font-bold text-base hover:bg-amber-100 active:scale-95"
+                  className="h-14 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-900 font-bold text-sm sm:text-base hover:bg-amber-100 active:scale-95"
                 >
-                  -0,1 kg
+                  -0,10 kg
                 </button>
                 <button
                   type="button"
                   onClick={() => handleAdjust(0.1)}
-                  className="h-14 rounded-2xl bg-teal-50 border-2 border-teal-300 text-teal-900 font-bold text-base hover:bg-teal-100 active:scale-95"
+                  className="h-14 rounded-2xl bg-teal-50 border-2 border-teal-300 text-teal-900 font-bold text-sm sm:text-base hover:bg-teal-100 active:scale-95"
                 >
-                  +0,1 kg
+                  +0,10 kg
                 </button>
                 <button
                   type="button"
                   onClick={() => handleAdjust(1.0)}
-                  className="h-14 rounded-2xl bg-emerald-100 border-2 border-emerald-400 text-emerald-900 font-bold text-base hover:bg-emerald-200 active:scale-95"
+                  className="h-14 rounded-2xl bg-emerald-100 border-2 border-emerald-400 text-emerald-900 font-bold text-sm sm:text-base hover:bg-emerald-200 active:scale-95"
                 >
-                  +1,0 kg
+                  +1,00 kg
                 </button>
               </div>
 
